@@ -3,6 +3,7 @@ const xlsx = require('xlsx');
 const fs = require('fs');
 const { generateExcel } = require('../services/excelService');
 const { validateTaskData, validateDates } = require('../utils/validation');
+const mongoose = require("mongoose");
 
 // Controller for getting tasks
 exports.getTasks = async (req, res) => {
@@ -78,15 +79,22 @@ exports.editTask = async (req, res) => {
   }
 };
 
-// Controller for deleting a task
 exports.deleteTask = async (req, res) => {
   try {
+    console.log("Received Task ID:", req.params.id);
+
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: "Invalid task ID" });
+    }
+
     const task = await Task.findById(req.params.id);
     if (!task) return res.status(404).json({ message: "Task not found" });
 
-    await task.remove();
+    await task.deleteOne();
     res.json({ message: "Task deleted successfully" });
   } catch (err) {
+    console.error("Error deleting task:", err);
     res.status(500).json({ message: "An error occurred while deleting the task." });
   }
 };
+
