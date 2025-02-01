@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000";
+const API_URL = "https://atulranjan9026-project-managementexcel.onrender.com"; // Updated backend URL
 
 export const fetchProjects = async () => {
   const { data } = await axios.get(`${API_URL}/tasks`);
