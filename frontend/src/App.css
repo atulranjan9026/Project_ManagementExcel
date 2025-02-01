@@ -43,7 +43,7 @@ h2::after {
   border-radius: 8px;
   border: 1px solid #ced4da;
   transition: all 0.3s ease;
-  flex: 1 1 200px;
+  flex: 1 1 70px;
   min-width: 180px;
   padding: 0.75rem 1rem;
   font-size: 14px;
