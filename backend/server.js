@@ -12,7 +12,10 @@ app.use(cors({ origin: "http://localhost:3000" }));
 app.use(bodyParser.json());
 app.use('/api', taskRoutes);  
 
-const PORT = process.env.PORT || 6000; // Use PORT from .env or default to 5000
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+const PORT = process.env.PORT || 5000; // Use PORT from .env or default to 5000
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
