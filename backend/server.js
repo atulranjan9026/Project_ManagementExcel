@@ -8,7 +8,7 @@ require('./config/db');  // MongoDB connection
 
 const app = express();
 
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "*" })); // Allow all origins
 app.use(bodyParser.json());
 app.use('/api', taskRoutes);  
 
