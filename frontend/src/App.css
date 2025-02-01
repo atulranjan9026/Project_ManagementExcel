@@ -1,0 +1,255 @@
+/* General Styling */
+.container {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  max-width: 1500px;
+}
+
+h2 {
+  color: #2c3e50;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-align: center;
+  font-size: 2.2rem;
+  position: relative;
+}
+
+h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background-color: #3498db;
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+/* Form Styling */
+.d-flex.gap-3 {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.form-control, .form-select {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  transition: all 0.3s ease;
+  flex: 1 1 200px;
+  min-width: 180px;
+  padding: 0.75rem 1rem;
+  font-size: 14px;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.3rem rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+/* Table Styling */
+.table {
+  margin-top: 2rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.table thead th {
+  background-color: #2c3e50;
+  color: white;
+  border-bottom: none;
+  padding: 1.2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+  transform: translateX(5px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table td {
+  vertical-align: middle;
+  padding: 1rem;
+  border-top: 1px solid #dee2e6;
+  font-size: 14px;
+}
+
+/* Button Styling */
+.btn {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  margin: 0 4px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #3498db;
+  border-color: #3498db;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.btn-warning {
+  background-color: #f1c40f;
+  border-color: #f1c40f;
+  color: white;
+}
+
+.btn-warning:hover {
+  background-color: #f39c12;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(241, 196, 15, 0.3);
+}
+
+.btn-danger {
+  background-color: #e74c3c;
+  border-color: #e74c3c;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+.btn-success {
+  background-color: #2ecc71;
+  border-color: #2ecc71;
+  color: white;
+  margin-top: 1rem;
+}
+
+.btn-success:hover {
+  background-color: #27ae60;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .d-flex.gap-3 {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .form-control, .form-select {
+    width: 100%;
+    margin-bottom: 0.75rem;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .table td, .table th {
+    white-space: nowrap;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+}
+
+/* Additional Enhancements */
+.btn {
+  background-image: linear-gradient(to right, transparent 50%, rgba(255, 255, 255, 0.2) 50%);
+  background-size: 200% 100%;
+  transition: background-position 0.3s ease;
+}
+
+.btn:hover {
+  background-position: -100% 0;
+}
+
+.form-control:hover, .form-select:hover {
+  border-color: #3498db;
+}
+
+/* Animation for Container */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Edit Button */
+.btn-warning {
+  background-color: #ffc107; /* Bootstrap's warning color */
+  border-color: #ffc107;
+  color: #000; /* Black text for better contrast */
+  transition: all 0.3s ease;
+  gap: 2.5rem; /* Adds spacing between icon and text */
+}
+
+.btn-warning:hover {
+  background-color: #e0a800; /* Darker shade on hover */
+  border-color: #e0a800;
+  transform: translateY(-2px); /* Slight lift effect */
+  box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3); /* Subtle shadow */
+}
+
+/* Delete Button */
+.btn-danger {
+  background-color: #dc3545; /* Bootstrap's danger color */
+  border-color: #dc3545;
+  color: #fff; /* White text for better contrast */
+  transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+  background-color: #c82333; /* Darker shade on hover */
+  border-color: #c82333;
+  transform: translateY(-2px); /* Slight lift effect */
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3); /* Subtle shadow */
+}
+
+.me-2 {
+  margin-right: 0.5rem; 
+}
+.editingForm {
+  background-color: #f0f8ff;
+  border: 2px solid #00bfff; 
+}
