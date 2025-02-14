@@ -1,100 +1,67 @@
 const Task = require('../models/Task');
-const xlsx = require('xlsx');
-const fs = require('fs');
-const { generateExcel } = require('../services/excelService');
-const { validateTaskData, validateDates } = require('../utils/validation');
-const mongoose = require("mongoose");
+const pdfService = require('../services/pdfService');
+const wordService = require('../services/wordService');
 
-// Controller for getting tasks
+// Fetch all tasks
 exports.getTasks = async (req, res) => {
   try {
     const tasks = await Task.find();
-    res.json(tasks);
-  } catch (err) {
-    res.status(500).json({ message: "An error occurred while fetching tasks." });
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch tasks." });
   }
 };
 
-// Controller for adding a task
+// Add a new task
 exports.addTask = async (req, res) => {
-  const { projectName, projectPlanning, marketResearch, contentCreation, codingDevelopment, testingDebugging, uiDesign, startDeliveryDate, finalDeliveryDate } = req.body;
-
-  const error = validateTaskData(req.body);
-  if (error) return res.status(400).json(error);
-
-  const dateError = validateDates(startDeliveryDate, finalDeliveryDate);
-  if (dateError) return res.status(400).json(dateError);
-
-  const task = new Task({ projectName, projectPlanning, marketResearch, contentCreation, codingDevelopment, testingDebugging, uiDesign, startDeliveryDate, finalDeliveryDate });
   try {
-    await task.save();
-    res.status(201).json(task);
-  } catch (err) {
-    res.status(400).json({ message: "An error occurred while saving the task." });
+    const newTask = new Task(req.body);
+    await newTask.save();
+    res.status(201).json(newTask);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 };
 
-// Controller for generating Excel
-exports.downloadExcel = async (req, res) => {
-  try {
-    const tasks = await Task.find();
-    const filePath = await generateExcel(tasks);
-    res.download(filePath, "tasks.xlsx", (err) => {
-      if (err) console.error("Error downloading file:", err);
-      fs.unlinkSync(filePath);  // Delete the file after download
-    });
-  } catch (err) {
-    res.status(500).json({ message: "Error generating the Excel file", error: err.message });
-  }
-};
-
-// Controller for editing a task
+// Edit an existing task
 exports.editTask = async (req, res) => {
-  const { projectName, projectPlanning, marketResearch, contentCreation, codingDevelopment, testingDebugging, uiDesign, startDeliveryDate, finalDeliveryDate } = req.body;
-
-  const error = validateTaskData(req.body);
-  if (error) return res.status(400).json(error);
-
-  const dateError = validateDates(startDeliveryDate, finalDeliveryDate);
-  if (dateError) return res.status(400).json(dateError);
-
   try {
-    const task = await Task.findById(req.params.id);
-    if (!task) return res.status(404).json({ message: "Task not found" });
-
-    task.projectName = projectName;
-    task.projectPlanning = projectPlanning;
-    task.marketResearch = marketResearch;
-    task.contentCreation = contentCreation;
-    task.codingDevelopment = codingDevelopment;
-    task.testingDebugging = testingDebugging;
-    task.uiDesign = uiDesign;
-    task.startDeliveryDate = startDeliveryDate;
-    task.finalDeliveryDate = finalDeliveryDate;
-
-    await task.save();
-    res.json(task);
-  } catch (err) {
-    res.status(500).json({ message: "An error occurred while updating the task." });
+    const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 };
 
+// Delete a task
 exports.deleteTask = async (req, res) => {
   try {
-    console.log("Received Task ID:", req.params.id);
+    await Task.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "Task deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete task." });
+  }
+};
 
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return res.status(400).json({ message: "Invalid task ID" });
-    }
+// Download tasks as PDF
+exports.downloadPdf = async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    const filePath = await pdfService.generatePdf(tasks);
+    res.download(filePath);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to generate PDF." });
+  }
+};
 
-    const task = await Task.findById(req.params.id);
-    if (!task) return res.status(404).json({ message: "Task not found" });
-
-    await task.deleteOne();
-    res.json({ message: "Task deleted successfully" });
-  } catch (err) {
-    console.error("Error deleting task:", err);
-    res.status(500).json({ message: "An error occurred while deleting the task." });
+// Download tasks as Word
+exports.downloadWord = async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    const filePath = await wordService.generateWord(tasks);
+    res.download(filePath);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to generate Word document." });
   }
 };
 
