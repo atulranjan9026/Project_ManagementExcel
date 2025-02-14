@@ -1,120 +1,181 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
+import './ProjectForm.css'; // Import the CSS file
 import { toast } from "react-toastify";
+import { uploadFile } from "../services/api";
 const ProjectForm = ({
   newProject,
   editingProject,
   handleChange,
   handleEditChange,
-  teamMembers,
-  selectedEmployees,
-  handleEmployeeSelection,
-  saveSelectedEmployees,
   addProject,
   saveEditProject,
-  setShowDropdown, // Pass setShowDropdown as a prop
 }) => {
-  const [showDropdown, setShowDropdownLocal] = useState(false); // Local state for dropdown visibility
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSave = () => {
-      saveSelectedEmployees(); // Call the parent's save function
-      setShowDropdownLocal(false); // Hide the dropdown locally
-      
+  useEffect(() => {
+    if (editingProject) {
+      setStatus(editingProject.status);
+    }
+  }, [editingProject]);
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
+  const handleStatusChange = (e) => {
+    setStatus(e.target.value);
+  };
+
+  const handleSubmit = async () => {
+    // if (!file && !editingProject) {
+    //   toast.error('Please select a file to upload.');
+    //   return;
+    // }
+
+    // if (!newProject.affectedHosts || !newProject.cve || !newProject.description || !newProject.input || !newProject.reference || !newProject.mitigation) {
+    //   toast.error('Please fill all required fields.');
+    //   return;
+    // }
+
+    setLoading(true);
+    try {
+      if (editingProject) {
+        await saveEditProject(file, status);
+      } else {
+        await addProject(file, status);
+      }
+    } catch (error) {
+      toast.error('Failed to submit form. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+ const handleUploadFile = async (file) => {
+    try {
+      const response = await uploadFile(file, editingProject ? editingProject._id : newProject._id);
+      toast.success("File uploaded successfully!");
+      console.log(response);
+    } catch (err) {
+      // toast.error("Error uploading the file");
+      console.error("Error uploading the file", err);
+    }
+  };
   return (
-    <div className="d-flex flex-wrap gap-3 mb-3">
-      <Form.Control
-        type="text"
-        placeholder="Project Name"
-        name="projectName"
-        value={editingProject ? editingProject.projectName : newProject.projectName}
-        onChange={editingProject ? handleEditChange : handleChange}
-        className={editingProject ? "editingForm" : ""}
-      />
-
-      {/* Project Planning Dropdown */}
-      <div className="position-relative">
-        <Button variant="secondary" onClick={() => setShowDropdownLocal(!showDropdown)}>
-          Select Project Planning
-        </Button>
-
-        {showDropdown && (
-          <div className="dropdown-menu show p-3" style={{ width: "300px" }}>
-            {teamMembers.projectPlanning.map((employee, index) => (
-              <Form.Check
-                key={index}
-                type="checkbox"
-                label={employee}
-                checked={selectedEmployees.includes(employee)}
-                onChange={() => handleEmployeeSelection(employee)}
+    <div className="auth-container">
+      <div className="form-group">
+        <label>Affected URL:</label>
+        <Form.Control
+          as="textarea"
+          rows={3}
+          placeholder="Enter Affected URL"
+          name="affectedHosts"
+          value={editingProject ? editingProject.affectedHosts : newProject.affectedHosts}
+          onChange={editingProject ? handleEditChange : handleChange}
+          className={editingProject ? "editingForm" : ""}
+        />
+      </div>
+      
+      <div className="form-group">
+        <label>CVE:</label>
+        <Form.Control
+          as="textarea"
+          rows={3}
+          placeholder="Enter CVE"
+          name="cve"
+          value={editingProject ? editingProject.cve : newProject.cve}
+          onChange={editingProject ? handleEditChange : handleChange}
+          className={editingProject ? "editingForm" : ""}
+        />
+      </div>
+      
+      <div className="form-group">
+        <label>Description:</label>
+        <Form.Control
+          as="textarea"
+          rows={3}
+          placeholder="Enter description"
+          name="description"
+          value={editingProject ? editingProject.description : newProject.description}
+          onChange={editingProject ? handleEditChange : handleChange}
+          className={editingProject ? "editingForm" : ""}
+        />
+      </div>
+      
+      <div className="form-group">
+        <label>Input:</label>
+        <Form.Control
+          as="textarea"
+          rows={3}
+          placeholder="Enter input"
+          name="input"
+          value={editingProject ? editingProject.input : newProject.input}
+          onChange={editingProject ? handleEditChange : handleChange}
+          className={editingProject ? "editingForm" : ""}
+        />
+      </div>
+      
+      <div className="form-group">
+        <label>Reference:</label>
+        <Form.Control
+          as="textarea"
+          rows={3}
+          placeholder="Enter reference"
+          name="reference"
+          value={editingProject ? editingProject.reference : newProject.reference}
+          onChange={editingProject ? handleEditChange : handleChange}
+          className={editingProject ? "editingForm" : ""}
+        />
+      </div>
+      
+      <div className="form-group">
+        <label>Mitigation:</label>
+        <Form.Control
+          as="textarea"
+          rows={3}
+          placeholder="Enter mitigation"
+          name="mitigation"
+          value={editingProject ? editingProject.mitigation : newProject.mitigation}
+          onChange={editingProject ? handleEditChange : handleChange}
+          className={editingProject ? "editingForm" : ""}
+        />
+      </div>
+      
+      <div className="pocStatus">
+        <div className="mt-3">
+          {/* <label>POC:</label>
+          <input
+                type="file"
+                onChange={(e) => handleUploadFile(e.target.files[0])}
               />
-            ))}
-            <Button variant="primary" onClick={handleSave} className="mt-2">
-              Save
-            </Button>
-          </div>
-        )}
+          {file && <p>Selected file: {file.name}</p>} */}
+        </div>
+        <div className="mt-3">
+          <label>Status:</label>
+          <Form.Check
+            type="radio"
+            label="Open"
+            name="status"
+            value="Open"
+            checked={status === "Open"}
+            onChange={handleStatusChange}
+          />
+          <Form.Check
+            type="radio"
+            label="Close"
+            name="status"
+            value="Close"
+            checked={status === "Close"}
+            onChange={handleStatusChange}
+          />
+        </div>
       </div>
 
-      {/* Other Form Fields */}
-      {Object.keys(teamMembers)
-        .filter((key) => key !== "projectPlanning")
-        .map((key) => (
-          <Form.Select
-            key={key}
-            name={key}
-            value={editingProject ? editingProject[key] : newProject[key]}
-            onChange={editingProject ? handleEditChange : handleChange}
-            className={editingProject ? "editingForm" : ""}
-          >
-            <option>Select {key.replace(/([A-Z])/g, " $1")}</option>
-            {teamMembers[key].map((emp, index) => (
-              <option key={index} value={emp}>
-                {emp}
-              </option>
-            ))}
-          </Form.Select>
-        ))}
-
-      <Form.Control
-        type="date"
-        name="startDeliveryDate"
-        value={
-          editingProject
-            ? editingProject.startDeliveryDate.split("T")[0]
-            : newProject.startDeliveryDate
-        }
-        onChange={editingProject ? handleEditChange : handleChange}
-        className={editingProject ? "editingForm" : ""}
-      />
-
-      <Form.Control
-        type="date"
-        name="finalDeliveryDate"
-        value={
-          editingProject
-            ? editingProject.finalDeliveryDate.split("T")[0]
-            : newProject.finalDeliveryDate
-        }
-        min={
-          editingProject
-            ? editingProject.startDeliveryDate
-            : newProject.startDeliveryDate
-        }
-        onChange={editingProject ? handleEditChange : handleChange}
-        className={editingProject ? "editingForm" : ""}
-      />
-
-      {editingProject ? (
-        <Button variant="primary" onClick={saveEditProject}>
-          Save Changes
-        </Button>
-      ) : (
-        <Button variant="primary" onClick={addProject}>
-          Add Project
-        </Button>
-      )}
+      <Button variant="primary" onClick={handleSubmit} disabled={loading}>
+        {loading ? 'Submitting...' : (editingProject ? 'Save Changes' : 'Add Project')}
+      </Button>
     </div>
   );
 };
