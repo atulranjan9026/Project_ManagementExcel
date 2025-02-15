@@ -111,12 +111,15 @@ const ProjectTable = ({ projects, formatDate, startEditProject, deleteProject })
               <Button variant="primary" onClick={() => handleDownloadWord(project._id)}>
                 Download Word
               </Button>
+              <div className="upload-container">
+              <label htmlFor="">POC </label>
               <input
                 type="file"
                 onChange={(e) => handleUploadFile(e.target.files[0], project._id)}
                 disabled={loading} // Disable input while uploading
               />
               {loading && <p>Uploading file...</p>}
+              </div>
             </td>
           </tr>
         ))}
