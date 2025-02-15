@@ -18,7 +18,7 @@ const ProjectTable = ({ projects, formatDate, startEditProject, deleteProject })
       link.click();
       document.body.removeChild(link);
     } catch (err) {
-      toast.error("Error downloading the PDF file");
+      // toast.error("Error downloading the PDF file");
       console.error("Error downloading the PDF file", err);
     }
   };
