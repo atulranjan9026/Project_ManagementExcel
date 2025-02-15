@@ -1,16 +1,16 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const users = []; // This should be replaced with a proper database in a real application
+const User = require('../models/User'); // Import the User model
 
 exports.signup = async (username, password) => {
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = { username, password: hashedPassword };
-  users.push(user);
+  const user = new User({ username, password: hashedPassword });
+  await user.save();
   return { message: 'User registered successfully' };
 };
 
 exports.login = async (username, password) => {
-  const user = users.find(u => u.username === username);
+  const user = await User.findOne({ username });
   if (!user) {
     throw new Error('User not found');
   }

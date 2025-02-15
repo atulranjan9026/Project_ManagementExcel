@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const apiRoutes = require('./routes/api');
 const downloadRoutes = require('./routes/download'); // Import downloadRoutes
+const authRoutes = require('./routes/authRoutes'); // Import authRoutes
 require('dotenv').config(); // Load environment variables
 const path = require('path');
 const fs = require('fs');
@@ -33,7 +34,7 @@ mongoose.connect(process.env.MONGO_URI, {
 //   fs.mkdirSync(uploadsDir, { recursive: true });
 // }
 
-app.use('/auth', require('./routes/authRoutes'));
+app.use('/auth', authRoutes); // Use authRoutes
 // app.use('/uploads', express.static(uploadsDir));
 app.use('/api', apiRoutes);
 app.use('/download', downloadRoutes); // Use downloadRoutes
