@@ -13,7 +13,7 @@ const Signup = () => {
     try {
       const response = await signup(username, password);
       localStorage.setItem('token', response.token);
-      navigate('/login');
+      navigate('/');
       toast.success('Signup successful');
     } catch (error) {
       toast.error(error.response?.data?.error || 'Signup failed');
@@ -34,7 +34,7 @@ const Signup = () => {
         </div>
         <button type="submit" className="signup-button">Signup</button>
       </form>
-      <p>Already have an account? <Link to="/login" className="login-link">Login</Link></p>
+      <p>Already have an account? <Link to="/" className="login-link">Login</Link></p>
     </div>
   );
 };

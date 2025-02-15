@@ -16,7 +16,7 @@ const Login = () => {
       toast.success('Login successful');
       // Save the token in local storage or context
       localStorage.setItem('token', response.token);
-      navigate('/'); // Redirect to home page
+      navigate('/home'); // Redirect to home page
     } catch (error) {
       toast.error(error.response?.data?.error || 'Login failed');
     }
