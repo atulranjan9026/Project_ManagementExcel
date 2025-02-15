@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'https://atulranjan9026-project-managementexcel.onrender.com/auth';
-// const API_URL = 'http://localhost:5000/auth';
+// const API_URL = 'https://atulranjan9026-project-managementexcel.onrender.com/auth';
+const API_URL = 'http://localhost:5000/auth';
 
 export const signup = async (username, password) => {
   try {

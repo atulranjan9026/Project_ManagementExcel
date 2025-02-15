@@ -1,8 +1,8 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const API_URL = "https://atulranjan9026-project-managementexcel.onrender.com/api"; // Ensure the correct API URL
-// const API_URL = "http://localhost:5000/api"; // Ensure the correct API URL
+// const API_URL = "https://atulranjan9026-project-managementexcel.onrender.com/api"; // Ensure the correct API URL
+const API_URL = "http://localhost:5000/api"; // Ensure the correct API URL
 
 export const fetchProjects = async () => {
   try {
